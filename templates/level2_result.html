@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Level 2 Result</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:linear-gradient(120deg,#0f2027,#203a43,#2c5364);
+color:white;
+text-align:center;
+padding-top:100px;
+}
+
+.card{
+width:500px;
+margin:auto;
+padding:40px;
+background:rgba(255,255,255,0.08);
+border-radius:20px;
+box-shadow:0 0 25px rgba(0,255,255,0.3);
+}
+
+.score{
+font-size:40px;
+color:#00ffff;
+}
+
+button{
+padding:12px 25px;
+border:none;
+background:#00c6ff;
+color:white;
+font-size:16px;
+border-radius:8px;
+cursor:pointer;
+margin-top:20px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+<h1>Technical Round Result</h1>
+
+<div class="score">
+Score : {{score}} / 30
+</div>
+
+<p>{{feedback}}</p>
+
+{% if score >= 15 %}
+
+<h3>✅ You Qualified for Level 3</h3>
+
+<a href="/level3">
+<button>Start Level 3</button>
+</a>
+
+{% else %}
+
+<h3>❌ Technical Round Failed</h3>
+
+<a href="/">
+<button>Finish Interview</button>
+</a>
+
+{% endif %}
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>AI HR Interview</title>
+
+<link rel="stylesheet" href="/static/interview.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<script src="/static/avatar_engine.js"></script>
+<script src="/static/speech_engine.js"></script>
+<script src="/static/camera_monitor.js"></script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- LEFT PANEL (35%) -->
+
+<div class="panel">
+
+<h2>AI HR Interview</h2>
+
+<div id="question-box"></div>
+
+<textarea id="answer-box" placeholder="Your spoken answer will appear here"></textarea>
+
+<div class="buttons">
+
+<button onclick="startListening()">🎤 Speak</button>
+
+<button onclick="nextQuestion()">Next</button>
+
+</div>
+
+</div>
+
+
+<!-- RIGHT PANEL (65%) -->
+
+<div class="avatar-section">
+
+<div id="avatar-container"></div>
+
+<video id="camera-box" autoplay muted></video>
+
+</div>
+
+</div>
+
+<script>
+
+let questions = {{questions | tojson}}
+
+startAvatarInterview(questions)
+
+</script>
+
+</body>
+</html>

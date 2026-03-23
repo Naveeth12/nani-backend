@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Level 2 - Technical Round</title>
+
+<style>
+body{
+margin:0;
+font-family:'Segoe UI',sans-serif;
+background:linear-gradient(120deg,#0f0c29,#302b63,#24243e);
+color:white;
+overflow-x:hidden;
+}
+
+.header{
+text-align:center;
+padding:30px;
+font-size:32px;
+font-weight:bold;
+background:linear-gradient(90deg,#00f2ff,#00ffa6);
+-webkit-background-clip:text;
+color:transparent;
+}
+
+.questions{
+width:85%;
+margin:auto;
+display:grid;
+grid-template-columns:1fr;
+gap:30px;
+}
+
+.card{
+background:rgba(255,255,255,0.05);
+border-radius:20px;
+padding:25px;
+backdrop-filter:blur(18px);
+box-shadow:
+0 15px 30px rgba(0,0,0,0.5),
+0 0 20px rgba(0,255,255,0.3);
+transform:translateY(40px) scale(0.95);
+opacity:0;
+animation:appear 0.7s forwards;
+}
+
+@keyframes appear{
+to{
+opacity:1;
+transform:translateY(0) scale(1);
+}
+}
+
+.options label{
+display:block;
+margin-top:10px;
+cursor:pointer;
+padding:6px;
+border-radius:8px;
+transition:0.3s;
+}
+
+.options label:hover{
+background:rgba(0,255,255,0.2);
+}
+
+.fill{
+width:100%;
+padding:10px;
+border-radius:10px;
+border:none;
+margin-top:10px;
+}
+
+button{
+display:block;
+margin:40px auto;
+padding:15px 40px;
+border:none;
+border-radius:14px;
+background:linear-gradient(45deg,#00f2ff,#00ffa6);
+font-size:18px;
+font-weight:bold;
+cursor:pointer;
+box-shadow:0 0 25px rgba(0,255,255,0.6);
+transition:0.3s;
+}
+
+button:hover{
+transform:scale(1.08);
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+Level 2 - Technical Round
+</div>
+
+<!-- ✅ FORM START -->
+<form action="/submit_level2" method="post" autocomplete="off">
+
+<div class="questions" id="questions"></div>
+
+<button type="submit">Submit Level 2</button>
+
+</form>
+<!-- ✅ FORM END -->
+
+
+<script>
+
+const questions = [
+
+{type:"mcq",q:"What is Python?",a:["Database","Programming Language","Browser","Operating System"]},
+{type:"mcq",q:"Which keyword defines a function in Python?",a:["func","define","def","function"]},
+{type:"mcq",q:"Which structure stores key-value pairs?",a:["List","Tuple","Dictionary","Set"]},
+{type:"mcq",q:"HTML stands for?",a:["Hyper Text Markup Language","HighText Machine Language","Hyperlinks Text Mark","None"]},
+{type:"mcq",q:"CSS is used for?",a:["Styling","Database","Server","AI"]},
+{type:"mcq",q:"FastAPI is written in?",a:["Java","Python","C++","JS"]},
+{type:"mcq",q:"Which tag creates hyperlink?",a:["<link>","<a>","<href>","<url>"]},
+{type:"mcq",q:"Which is JS framework?",a:["Django","Flask","React","Laravel"]},
+{type:"mcq",q:"Python file extension?",a:[".py",".java",".js",".html"]},
+{type:"mcq",q:"Which keyword creates class?",a:["define","class","object","struct"]},
+{type:"mcq",q:"SQL used for?",a:["Database","Styling","AI","Frontend"]},
+{type:"mcq",q:"Which method adds list item?",a:["add","append","push","insert"]},
+{type:"mcq",q:"HTTP stands for?",a:["Hyper Text Transfer Protocol","High Transfer","Host Transfer","None"]},
+{type:"mcq",q:"Which is backend framework?",a:["Flask","Bootstrap","Tailwind","CSS"]},
+{type:"mcq",q:"Which symbol is comment in Python?",a:["//","#","<!-- -->","**"]},
+
+{type:"fill",q:"Python was created by ______."},
+{type:"fill",q:"HTML is used to create ______ of webpage."},
+{type:"fill",q:"CSS controls the ______ of website."},
+{type:"fill",q:"JavaScript runs inside the ______."},
+{type:"fill",q:"FastAPI is used to build ______ APIs."},
+{type:"fill",q:"SQL is used to manage ______."},
+{type:"fill",q:"React is a ______ library."},
+{type:"fill",q:"A function is defined using ______ keyword."},
+{type:"fill",q:"Dictionary stores data as ______ pairs."},
+{type:"fill",q:"The brain of computer is ______."},
+{type:"fill",q:"HTML uses ______ tags."},
+{type:"fill",q:"CSS stands for Cascading ______ Sheets."},
+{type:"fill",q:"Python supports ______ programming."},
+{type:"fill",q:"Git is a ______ control system."},
+{type:"fill",q:"Frontend interacts with ______."}
+
+];
+
+function loadQuestions(){
+
+let container=document.getElementById("questions");
+
+questions.forEach((q,i)=>{
+
+let html=`<div class="card" style="animation-delay:${i*0.05}s">
+<b>Q${i+1}: ${q.q}</b>`;
+
+if(q.type=="mcq"){
+
+html+=`<div class="options">`;
+
+q.a.forEach(opt=>{
+html+=`
+<label>
+<input type="radio" name="q${i}" value="${opt}" required>
+${opt}
+</label>`;
+});
+
+html+=`</div>`;
+}
+else{
+
+html+=`
+<input class="fill" type="text" name="q${i}" required autocomplete="off">
+`;
+}
+
+html+=`</div>`;
+
+<!-- ✅ FINAL FIX APPLIED HERE -->
+container.insertAdjacentHTML("beforeend", html);
+
+});
+
+}
+
+loadQuestions();
+
+</script>
+
+
+<!-- CAMERA -->
+
+<video id="camera"
+autoplay
+muted
+style="position:fixed;bottom:10px;right:10px;width:200px;border:3px solid red;border-radius:10px">
+</video>
+
+<script src="/static/proctor.js"></script>
+
+<script>
+
+async function continueCamera(){
+
+if(localStorage.getItem("cameraAllowed")!=="true"){
+alert("Camera permission missing. Interview cancelled.");
+window.location="/";
+return;
+}
+
+try{
+const stream = await navigator.mediaDevices.getUserMedia({video:true});
+document.getElementById("camera").srcObject=stream;
+}
+catch(err){
+alert("Camera access lost. Interview cancelled.");
+window.location="/";
+}
+
+}
+
+continueCamera();
+
+</script>
+
+</body>
+</html>

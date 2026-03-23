@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>AI Interview - JAM Round</title>
+
+<style>
+
+/* ===== GLOBAL ===== */
+
+body{
+margin:0;
+font-family:Segoe UI;
+background:radial-gradient(circle at top,#0f2027,#203a43,#2c5364);
+color:white;
+overflow:hidden;
+}
+
+/* ===== MAIN LAYOUT ===== */
+
+.container{
+display:flex;
+height:100vh;
+}
+
+/* ===== ROBOT SIDE (65%) ===== */
+
+.robot-side{
+width:65%;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+position:relative;
+background:linear-gradient(145deg,#0a0f1a,#0f2027);
+box-shadow:inset 0 0 50px rgba(0,255,255,0.2);
+}
+
+/* ===== VIDEO CALL FRAME ===== */
+
+.video-frame{
+width:80%;
+height:80%;
+border-radius:25px;
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(20px);
+box-shadow:
+0 0 40px rgba(0,255,255,0.4),
+inset 0 0 20px rgba(255,255,255,0.1);
+display:flex;
+justify-content:center;
+align-items:center;
+transform:perspective(1000px) rotateY(-5deg);
+}
+
+/* ===== HUMANOID ROBOT ===== */
+
+.robot{
+display:flex;
+flex-direction:column;
+align-items:center;
+}
+
+/* HEAD */
+.head{
+width:140px;
+height:140px;
+background:linear-gradient(#00f2ff,#0072ff);
+border-radius:50%;
+box-shadow:0 0 25px cyan;
+position:relative;
+}
+
+/* EYES */
+.eyes{
+display:flex;
+justify-content:space-around;
+margin-top:40px;
+}
+
+.eye{
+width:22px;
+height:22px;
+background:white;
+border-radius:50%;
+animation:blink 4s infinite;
+}
+
+@keyframes blink{
+0%,90%,100%{height:22px;}
+95%{height:3px;}
+}
+
+/* MOUTH */
+.mouth{
+width:60px;
+height:10px;
+background:white;
+margin:15px auto;
+border-radius:10px;
+}
+
+/* BODY */
+.body{
+width:120px;
+height:160px;
+background:linear-gradient(#00c6ff,#0072ff);
+border-radius:25px;
+margin-top:10px;
+box-shadow:0 0 20px cyan;
+}
+
+/* ARMS */
+.arms{
+display:flex;
+justify-content:space-between;
+width:240px;
+margin-top:-140px;
+}
+
+.arm{
+width:20px;
+height:110px;
+background:#00c6ff;
+border-radius:10px;
+}
+
+.left{ transform:rotate(25deg); }
+.right{ transform:rotate(-25deg); }
+
+/* SPEAKING */
+.speaking .mouth{
+animation:talk 0.3s infinite alternate;
+}
+
+@keyframes talk{
+from{height:10px;}
+to{height:25px;}
+}
+
+/* HAND WAVE */
+.wave{
+animation:wave 1s infinite alternate;
+}
+
+@keyframes wave{
+from{transform:rotate(20deg);}
+to{transform:rotate(50deg);}
+}
+
+/* ===== RIGHT PANEL (35%) ===== */
+
+.content{
+width:35%;
+padding:30px;
+display:flex;
+flex-direction:column;
+background:rgba(0,0,0,0.4);
+backdrop-filter:blur(20px);
+box-shadow:-10px 0 30px rgba(0,255,255,0.2);
+}
+
+/* 3D CARDS */
+
+.card{
+background:rgba(255,255,255,0.05);
+border-radius:20px;
+padding:20px;
+margin-bottom:20px;
+box-shadow:
+0 10px 20px rgba(0,0,0,0.5),
+0 0 15px rgba(0,255,255,0.3);
+transform:perspective(800px) rotateX(5deg);
+}
+
+/* BUTTON */
+
+button{
+padding:15px;
+border:none;
+border-radius:20px;
+background:linear-gradient(45deg,#00f2ff,#00ffa6);
+cursor:pointer;
+font-size:16px;
+margin-top:20px;
+}
+
+/* OUTPUT */
+
+#output{
+margin-top:20px;
+min-height:100px;
+}
+
+/* TIMER */
+
+#timer{
+font-size:20px;
+color:#00f2ff;
+margin-top:10px;
+}
+
+/* CAMERA */
+
+#camera{
+position:absolute;
+bottom:15px;
+right:15px;
+width:180px;
+border-radius:10px;
+border:2px solid cyan;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- ROBOT SIDE -->
+<div class="robot-side">
+
+<div class="video-frame">
+
+<div id="robot" class="robot">
+<div class="head">
+<div class="eyes">
+<div class="eye"></div>
+<div class="eye"></div>
+</div>
+<div class="mouth"></div>
+</div>
+
+<div class="body"></div>
+
+<div class="arms">
+<div class="arm left"></div>
+<div class="arm right" id="rightHand"></div>
+</div>
+</div>
+
+</div>
+
+<video id="camera" autoplay muted></video>
+
+</div>
+
+<!-- CONTENT SIDE -->
+<div class="content">
+
+<div class="card">
+<h2>Topic</h2>
+<p>{{topic}}</p>
+</div>
+
+<div class="card">
+<h3>Instructions</h3>
+<p>Speak for 60 seconds clearly.</p>
+<div id="timer">60 sec</div>
+<button onclick="startJAM()">Start</button>
+</div>
+
+<div class="card">
+<h3>Your Speech</h3>
+<div id="output"></div>
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+let transcript=""
+let time=60
+
+function robotSpeak(text){
+const robot=document.getElementById("robot")
+robot.classList.add("speaking")
+
+let speech=new SpeechSynthesisUtterance(text)
+
+speech.onend=()=>robot.classList.remove("speaking")
+
+speechSynthesis.speak(speech)
+}
+
+window.onload=()=>{
+robotSpeak("Your topic is {{topic}}. Click start to begin.")
+}
+
+/* TIMER */
+function startTimer(){
+let t=setInterval(()=>{
+time--
+document.getElementById("timer").innerText=time+" sec"
+
+if(time<=0){
+clearInterval(t)
+}
+},1000)
+}
+
+/* JAM START */
+function startJAM(){
+
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+
+if(!SpeechRecognition){
+alert("Use Chrome")
+return
+}
+
+const recognition=new SpeechRecognition()
+recognition.continuous=true
+recognition.interimResults=true
+
+recognition.start()
+startTimer()
+
+/* hand wave */
+document.getElementById("rightHand").classList.add("wave")
+
+robotSpeak("Listening started")
+
+recognition.onresult=(event)=>{
+let text=event.results[event.results.length-1][0].transcript
+transcript+=text+" "
+document.getElementById("output").innerText=transcript
+}
+
+setTimeout(()=>{
+recognition.stop()
+finishJAM()
+},60000)
+
+}
+
+/* SEND */
+function finishJAM(){
+fetch("/submit_jam",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({speech:transcript})
+})
+.then(res=>res.text())
+.then(html=>document.body.innerHTML=html)
+}
+
+/* CAMERA */
+navigator.mediaDevices.getUserMedia({video:true})
+.then(stream=>document.getElementById("camera").srcObject=stream)
+
+</script>
+
+</body>
+</html>

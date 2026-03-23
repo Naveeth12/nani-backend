@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Aptitude Result</title>
+</head>
+
+<body>
+
+<h1>Aptitude Score: {{score}} / 50</h1>
+
+<p>{{feedback}}</p>
+
+{% if qualified %}
+
+<h2>Passed Level 1</h2>
+
+<a href="/level2">
+<button>Start Level 2</button>
+</a>
+
+{% else %}
+
+<h2>Failed Level 1</h2>
+
+<a href="/">
+<button>Try Again</button>
+</a>
+
+{% endif %}
+
+</body>
+</html>

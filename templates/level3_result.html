@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Level 3 Result</title>
+
+<style>
+
+body{
+background:#0f2027;
+color:white;
+font-family:Arial;
+text-align:center;
+padding-top:120px;
+}
+
+.box{
+background:white;
+color:black;
+padding:40px;
+display:inline-block;
+border-radius:10px;
+}
+
+button{
+margin-top:20px;
+padding:10px 25px;
+font-size:18px;
+background:#0072ff;
+color:white;
+border:none;
+border-radius:8px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="box">
+
+<h1>Level 3 Result</h1>
+
+<h2>Score : {{score}}</h2>
+
+<h3>{{feedback}}</h3>
+
+{% if score >= 3 %}
+<a href="/level4">
+<button>Start Level 4</button>
+</a>
+{% endif %}
+
+</div>
+
+</body>
+
+</html>

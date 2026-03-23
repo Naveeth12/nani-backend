@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<title>AI Interview</title>
+
+<link rel="stylesheet" href="/static/style.css">
+
+</head>
+
+<body>
+
+<div class="main-container">
+
+    <!-- ROBOT PANEL -->
+    <div class="robot-panel">
+
+        <img src="/static/robot.png" class="robot-img">
+
+    </div>
+
+
+    <!-- QUESTION PANEL -->
+    <div class="question-panel">
+
+        <h2>Interview Round {{ round_number }}</h2>
+
+        <div class="question-box">
+            <p id="question-text">{{ question }}</p>
+        </div>
+
+        <form action="/submit-answer" method="post">
+
+            <input type="hidden" name="name" value="{{ name }}">
+            <input type="hidden" name="domain" value="{{ domain }}">
+            <input type="hidden" name="company_type" value="{{ company_type }}">
+            <input type="hidden" name="round_number" value="{{ round_number }}">
+            <input type="hidden" name="question" value="{{ question }}">
+
+            <textarea name="answer" placeholder="Type your answer..." required></textarea>
+
+            <button type="submit">Submit Answer</button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script>
+
+window.onload = function(){
+
+let text = document.getElementById("question-text").innerText
+
+let speech = new SpeechSynthesisUtterance(text)
+
+speech.rate = 1
+
+speech.pitch = 1
+
+window.speechSynthesis.speak(speech)
+
+}
+
+</script>
+
+</body>
+</html>
